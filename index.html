@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>آزمایش برش مستقیم</title>
+<style>
+:root{--p:#0b3d6b;--bg:#eef2f6;--card:#fff;--bd:#cbd5e1;--tx:#0f172a;--mut:#64748b;--ok:#15803d;--wr:#b45309}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:Tahoma,"Noto Naskh Arabic","Noto Sans Arabic",sans-serif;font-size:14px;-webkit-text-size-adjust:100%}
+header{position:sticky;top:0;z-index:20;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 8px) 12px 8px}
+h1{font-size:17px;margin:0}
+#menuBtn{background:transparent;border:0;color:#fff;font-size:26px;line-height:1;padding:4px 10px}
+#menu{position:fixed;top:calc(env(safe-area-inset-top,0px) + 48px);left:10px;background:#fff;border:1px solid var(--bd);border-radius:10px;box-shadow:0 6px 20px #0003;z-index:30;min-width:180px;overflow:hidden}
+#menu[hidden]{display:none}
+#menu button{display:block;width:100%;text-align:right;background:#fff;border:0;border-bottom:1px solid #e2e8f0;padding:13px 16px;font-size:15px;font-family:inherit;color:var(--tx)}
+#menu button:last-child{border-bottom:0}
+main{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 30px)}
+section.card{background:var(--card);margin:10px;border-radius:12px;padding:10px;border:1px solid var(--bd)}
+h2{font-size:15px;margin:0 0 8px;color:var(--p);border-bottom:2px solid var(--p);padding-bottom:4px}
+h3{font-size:13px;margin:12px 0 6px;color:#334155}
+.g{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.span2{grid-column:1/-1}
+label.f{display:flex;flex-direction:column;font-size:12px;color:var(--mut);gap:3px;min-width:0}
+input,select,textarea{width:100%;min-width:0;font-family:inherit;font-size:15px;padding:8px;border:1px solid var(--bd);border-radius:8px;background:#fff;color:var(--tx)}
+input.num{direction:ltr;text-align:center}
+input[type=checkbox]{width:20px;height:20px;padding:0}
+label.ck{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg button{padding:10px 6px;border:2px solid var(--bd);background:#fff;border-radius:10px;font-family:inherit;font-size:13px;line-height:1.5;color:var(--tx)}
+.seg button.on{border-color:var(--p);background:#e0ecf8;font-weight:bold}
+.tw{overflow-x:auto;max-height:68vh;border:1px solid var(--bd);border-radius:8px}
+table{border-collapse:collapse;width:100%}
+table.dt th,table.dt td,table.spt th,table.spt td,table.rt th,table.rt td{border:1px solid var(--bd);padding:3px;text-align:center;font-size:12px}
+table.dt th{position:sticky;top:0;background:#e2e8f0;z-index:2;min-width:84px;font-weight:normal}
+table.dt th.c1,table.dt td.c1{position:sticky;right:0;background:#f1f5f9;z-index:3;min-width:76px}
+table.dt th.c1{z-index:4;background:#cbd5e1}
+table.dt td input,table.spt td input{padding:6px 2px;font-size:14px;border-radius:6px}
+table.dt td.c1 small,table.dt th small{display:block;color:var(--mut);font-size:10px}
+table.spt th{background:#e2e8f0;font-weight:normal}
+table.spt td.lb,table.rt td.lb{text-align:right;background:#f8fafc;font-size:11px}
+table.spt .dv{background:#f1f5f9;color:#334155;direction:ltr}
+.chart{margin:8px 0;border:1px solid var(--bd);border-radius:8px;padding:4px;background:#fff}
+.chart svg{width:100%;height:auto;display:block}
+.nochart{padding:14px;color:var(--mut);text-align:center;font-size:12px}
+.big{border:2px solid var(--p);border-radius:10px;padding:10px;text-align:center;font-size:17px;line-height:1.9;background:#f0f7ff;margin:8px 0}
+.big b{color:var(--p);direction:ltr;unicode-bidi:embed}
+.note{font-size:12px;color:var(--mut);line-height:1.8}
+.chk{font-size:12px;line-height:1.8;margin:4px 0;padding:4px 8px;border-radius:6px}
+.chk.w{background:#fef3c7;color:#78350f}
+.chk.o{background:#dcfce7;color:#14532d}
+.chk.i{background:#e0f2fe;color:#0c4a6e}
+.rb{background:#f8fafc;border:1px dashed var(--bd);border-radius:8px;padding:8px;font-size:13px;line-height:1.9;margin-top:8px}
+.rb b{direction:ltr;unicode-bidi:embed}
+button.act{width:100%;padding:11px;border-radius:10px;border:1px solid #b91c1c;background:#fff;color:#b91c1c;font-family:inherit;font-size:14px;margin-top:6px}
+details{margin-top:8px}
+details summary{font-size:13px;color:var(--p);padding:6px 0}
+details ul{margin:4px 0;padding-right:20px;font-size:12px;line-height:1.9}
+[hidden]{display:none!important}
+#printRoot{display:none}
+@media print{
+  @page{size:A4;margin:10mm}
+  html,body{background:#fff}
+  body>*:not(#printRoot){display:none!important}
+  #printRoot{display:block}
+}
+</style>
+<style id="repcss"></style>
+</head>
+<body>
+<header>
+  <h1>آزمایش برش مستقیم</h1>
+  <button id="menuBtn" aria-label="منو">☰</button>
+</header>
+<div id="menu" hidden>
+  <button data-act="print">🖨️ چاپ</button>
+  <button data-act="share">📤 اشتراک‌گذاری</button>
+</div>
+<main id="app"></main>
+<div id="printRoot"></div>
+
+<script>
+'use strict';
+/* =====================================================================
+   آزمایش برش مستقیم — ASTM D3080/D3080M (معادل AASHTO T 236) و BS 1377-7 (آزمون سریع)
+   همهٔ محاسبات: نیرو N ، طول mm ، تنش kPa
+   ===================================================================== */
+var KEY='dshear_state_v1';
+var BASE=[0,0.1,0.2,0.3,0.4,0.5,0.75,1,1.5,2,2.5,3,3.5,4,5];
+var CT=[0,0.1,0.25,0.5,1,2,4,8,15,30,60,120,240,480,1440];
+var G=9.80665;
+var COL=['#dc2626','#2563eb','#15803d'];
+
+var DEF={
+  mode:'CD',
+  gen:{project:'',site:'',bh:'',depth:'',sampleNo:'',date:'',tester:'',cond:'intact',desc:'',iran:'',notes:''},
+  box:{shape:'square',size:'60',dmax:'',top:''},
+  gh:'0.01',gv:'0.01',vdir:'comp',
+  dev:{type:'ring',ringNo:'',k:'',kunit:'N/div',gr:'0.01',cunit:'N',acc:''},
+  nmode:'stress',lever:'1',cap:'0',Gs:'',
+  sp:[{sigma:'',mass:'',H:'20',m:'',w0:'',wf:''},{sigma:'',mass:'',H:'20',m:'',w0:'',wf:''},{sigma:'',mass:'',H:'20',m:'',w0:'',wf:''}],
+  rate:'',tmethod:'taylor',df:'',
+  limitPct:'10',crit:'auto',areaCorr:false,c0:false,vspec:'2',vthree:false,
+  F:{0:{},1:{},2:{}},V:{0:{},1:{},2:{}},C:{0:{},1:{},2:{}},
+  T50:['','',''],T90:['','','']
+};
+
+/* ---------------- ابزارهای عمومی ---------------- */
+function clone(o){return JSON.parse(JSON.stringify(o));}
+function merge(d,s){
+  if(Array.isArray(d)) return d.map(function(x,i){return (s&&s[i]!==undefined)?merge(x,s[i]):x;});
+  if(d&&typeof d==='object'){
+    var o={},k;
+    for(k in d){o[k]=(s&&typeof s==='object'&&k in s)?merge(d[k],s[k]):d[k];}
+    if(s&&typeof s==='object'){for(k in s){if(!(k in o))o[k]=s[k];}}
+    return o;
+  }
+  return (s!==undefined)?s:d;
+}
+function normalizeNum(v){
+  return String(v==null?'':v)
+    .replace(/[\u06F0-\u06F9]/g,function(c){return String(c.charCodeAt(0)-0x06F0);})
+    .replace(/[\u0660-\u0669]/g,function(c){return String(c.charCodeAt(0)-0x0660);})
+    .replace(/[\u066B\u066C\u060C,]/g,'.')
+    .replace(/\u2212/g,'-');
+}
+function num(v){
+  var t=normalizeNum(v).trim();
+  if(t===''||t==='-'||t==='.') return NaN;
+  var x=Number(t);
+  return isFinite(x)?x:NaN;
+}
+function fmt(x,d){return (typeof x==='number'&&isFinite(x))?x.toFixed(d):'—';}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function getP(p){var a=p.split('.'),o=S;for(var i=0;i<a.length;i++){if(o==null)return '';o=o[a[i]];}return o==null?'':o;}
+function setP(p,v){
+  var a=p.split('.'),o=S;
+  for(var i=0;i<a.length-1;i++){if(o[a[i]]==null||typeof o[a[i]]!=='object')o[a[i]]={};o=o[a[i]];}
+  o[a[a.length-1]]=v;
+}
+function rk(mm){return String(+mm.toFixed(3)).replace('.','p');}
+function byId(id){return document.getElementById(id);}
+function setH(id,h){var e=byId(id);if(e)e.innerHTML=h;}
+function setT(id,t){var e=byId(id);if(e)e.textContent=t;}
+
+var S;
+try{
+  var raw=localStorage.getItem(KEY);
+  S=raw?merge(clone(DEF),JSON.parse(raw)):clone(DEF);
+}catch(e){S=clone(DEF);}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+
+/* ---------------- هندسه و ردیف‌های جدول ---------------- */
+function geomOf(){
+  var L=num(S.box.size),sq=S.box.shape==='square';
+  return {L:L,sq:sq,A:sq?L*L:Math.PI*L*L/4};
+}
+function areaAt(d,g){
+  if(!S.areaCorr) return g.A;
+  if(g.sq) return g.L*Math.max(g.L-d,0);
+  var x=Math.min(d/g.L,1);
+  return (g.L*g.L/2)*(Math.acos(x)-x*Math.sqrt(1-x*x));
+}
+function getRows(){
+  var L=num(S.box.size),pct=num(S.limitPct)||10;
+  var lim=isFinite(L)?L*pct/100:6;
+  var out=BASE.filter(function(x){return x<=lim+1e-9;});
+  for(var x=5.5;x<=lim+1e-9;x+=0.5)out.push(+x.toFixed(3));
+  var last=out[out.length-1];
+  if(lim-last>1e-6)out.push(+lim.toFixed(3));
+  return out;
+}
+function divOf(mm){var gh=num(S.gh)||0.01;return +(mm/gh).toFixed(2);}
+
+/* ---------------- نیرو و بار قائم ---------------- */
+function forceK(){ /* نیوتن به ازای هر واحد قرائت */
+  if(S.dev.type==='cell'){
+    return ({N:1,kN:1000,kgf:G,lbf:4.448222})[S.dev.cunit]||1;
+  }
+  var k=num(S.dev.k);
+  var u=String(S.dev.kunit).split('/');
+  var fac=({N:1,kgf:G,kN:1000})[u[0]];
+  var v=k*fac;
+  if(u[1]==='mm') v*=num(S.dev.gr);
+  return v;
+}
+function normalOf(s,g){
+  if(S.nmode==='stress'){
+    var sg=num(S.sp[s].sigma);
+    return {sigma:sg,N:sg*g.A/1000};
+  }
+  var m=num(S.sp[s].mass),lr=num(S.lever);if(!isFinite(lr))lr=1;
+  var cap=num(S.cap);if(!isFinite(cap))cap=0;
+  var N=m*G*lr+cap;
+  return {sigma:N/g.A*1000,N:N};
+}
+
+/* ---------------- گسیختگی و رگرسیون ---------------- */
+function pickFailure(pts,g){
+  var v=pts.filter(function(p){return isFinite(p.tau)&&p.mm>0;});
+  if(v.length<2) return null;
+  var last=v[v.length-1],mx=v[0];
+  v.forEach(function(p){if(p.tau>mx.tau)mx=p;});
+  function nearest(pct){
+    var t=g.L*pct/100,b=null,bd=1e9;
+    v.forEach(function(p){var d=Math.abs(p.mm-t);if(d<bd){bd=d;b=p;}});
+    return {p:b,d:bd};
+  }
+  var crit=S.crit;
+  if(crit==='max') return {p:mx,type:'حداکثر تنش برشی'};
+  if(crit==='10'||crit==='15'){
+    var n=nearest(+crit),ok=n.d<=0.26;
+    return {p:n.p,type:'تنش در '+crit+'٪ جابه‌جایی نسبی'+(ok?'':' (نزدیک‌ترین قرائت؛ به این مقدار نرسیده)')};
+  }
+  if(mx!==last&&mx.tau>last.tau) return {p:mx,type:'پیک (حداکثر تنش برشی)'};
+  var n2=nearest(10),reached=last.mm>=g.L*0.10-0.26;
+  return {p:reached?n2.p:last,type:reached?'بدون پیک؛ تنش در ۱۰٪ جابه‌جایی نسبی':'بدون پیک؛ به ۱۰٪ نرسیده — آخرین قرائت'};
+}
+function fitLine(P,c0){
+  var n=P.length;if(n<2)return null;
+  var i,sx=0,sy=0,sxx=0,sxy=0;
+  for(i=0;i<n;i++){sx+=P[i].x;sy+=P[i].y;sxx+=P[i].x*P[i].x;sxy+=P[i].x*P[i].y;}
+  var t,c;
+  if(c0){
+    if(!(sxx>0))return null;
+    t=sxy/sxx;c=0;
+  }else{
+    var den=n*sxx-sx*sx;
+    if(!(Math.abs(den)>1e-12))return null;
+    t=(n*sxy-sx*sy)/den;c=(sy-t*sx)/n;
+  }
+  var my=sy/n,ssr=0,sst=0;
+  for(i=0;i<n;i++){var e=P[i].y-(c+t*P[i].x);ssr+=e*e;sst+=(P[i].y-my)*(P[i].y-my);}
+  var r2=sst>0?1-ssr/sst:1;
+  return {c:c,t:t,phi:Math.atan(t)*180/Math.PI,r2:r2,n:n,c0:!!c0};
+}
+
+/* ---------------- تحکیم: روش تیلور (√t) ---------------- */
+function consCalc(s){
+  var C=S.C[s]||{},sign=S.vdir==='comp'?1:-1,gv=num(S.gv);
+  var r0=num(C[0]),first=NaN,i;
+  for(i=0;i<CT.length;i++){var q=num(C[i]);if(isFinite(q)){first=q;break;}}
+  if(!isFinite(r0))r0=first;
+  var pts=[];
+  CT.forEach(function(t,i){
+    var raw=num(C[i]);if(!isFinite(raw)||!isFinite(r0))return;
+    pts.push({t:t,x:Math.sqrt(t),s:(raw-r0)*gv*sign});
+  });
+  var res={pts:pts,t90:NaN,t50:NaN,sfin:NaN,a:NaN,m:NaN};
+  var P=pts.filter(function(p){return p.t>0;});
+  if(P.length) res.sfin=P[P.length-1].s;
+  if(P.length<4)return res;
+  var smax=-Infinity;P.forEach(function(p){if(p.s>smax)smax=p.s;});
+  if(!(smax>0))return res;
+  var sel=P.filter(function(p){return p.s<=0.5*smax;});
+  if(sel.length<2)sel=P.slice(0,3);
+  var f=fitLine(sel.map(function(p){return {x:p.x,y:p.s};}),false);
+  if(!f||!(f.t>0))return res;
+  var a=f.c,m=f.t,m2=m/1.15;
+  res.a=a;res.m=m;
+  var seq=[{x:0,g:0}].concat(P.map(function(p){return {x:p.x,g:p.s-(a+m2*p.x)};}));
+  if(seq[1].g<=0)return res;
+  for(i=1;i<seq.length-1;i++){
+    if(seq[i].g>0&&seq[i+1].g<=0){
+      var fr=seq[i].g/(seq[i].g-seq[i+1].g);
+      var x90=seq[i].x+fr*(seq[i+1].x-seq[i].x);
+      res.t90=x90*x90;
+      var s90=a+m2*x90,s100=a+(s90-a)/0.9,x50=0.5*(s100-a)/m;
+      res.t50=x50*x50;res.s100=s100;
+      break;
+    }
+  }
+  return res;
+}
+function rateCalc(cons,g){
+  var o={},df=num(S.df);
+  if(!isFinite(df))df=g.L*0.1;
+  o.df=df;
+  var t90=[0,1,2].map(function(i){var m=num(S.T90[i]);return isFinite(m)?m:cons[i].t90;});
+  var t50=[0,1,2].map(function(i){var m=num(S.T50[i]);return isFinite(m)?m:cons[i].t50;});
+  function mx(a){var v=a.filter(isFinite);return v.length?Math.max.apply(null,v):NaN;}
+  o.t90s=t90;o.t50s=t50;o.t90=mx(t90);o.t50=mx(t50);
+  o.tf=S.tmethod==='taylor'?11.6*o.t90:50*o.t50;
+  o.rate=o.df/o.tf;
+  return o;
+}
+
+/* ---------------- محاسبهٔ اصلی ---------------- */
+function calc(){
+  var g=geomOf(),rows=getRows(),kf=forceK(),cd=S.mode==='CD';
+  var gv=num(S.gv);
+  var sign=S.vdir==='dil'?1:-1; /* تبدیل تغییر قرائت به «انبساط مثبت» */
+  var out={g:g,rows:rows,kf:kf,sp:[],cons:[],cd:cd};
+  var s;
+  for(s=0;s<3;s++){
+    var nm=normalOf(s,g),F=S.F[s]||{};
+    var r0=num(F[rk(0)]);if(!isFinite(r0))r0=0;
+    var pts=[];
+    rows.forEach(function(mm,i){
+      var raw=num(F[rk(mm)]);if(!isFinite(raw))return;
+      var f=(raw-r0)*kf,a=areaAt(mm,g);
+      pts.push({i:i,mm:mm,raw:raw,F:f,A:a,tau:f/a*1000});
+    });
+    var fail=pickFailure(pts,g);
+    var V=S.V[s]||{},vr0=num(V[rk(0)]),vp=[];
+    if(cd&&(S.vthree||String(s)===String(S.vspec))){
+      rows.forEach(function(mm){
+        var raw=num(V[rk(mm)]);if(!isFinite(raw))return;
+        if(!isFinite(vr0))vr0=raw;
+        vp.push({mm:mm,dv:(raw-vr0)*gv*sign});
+      });
+    }
+    var sp=S.sp[s],H0=num(sp.H),mw=num(sp.m),w0=num(sp.w0)/100,Gs=num(S.Gs);
+    var rho=mw/(g.A*H0/1000),gam=rho*G,rhod=rho/(1+w0),gd=rhod*G;
+    var e0=isFinite(Gs)?Gs/rhod-1:NaN,Sr=isFinite(e0)&&e0>0?w0*Gs/e0*100:NaN;
+    out.sp.push({nm:nm,pts:pts,fail:fail,vert:vp,H0:H0,gam:gam,gd:gd,e0:e0,Sr:Sr,w0:num(sp.w0),wf:num(sp.wf)});
+  }
+  if(cd){for(s=0;s<3;s++)out.cons.push(consCalc(s));}
+  out.rate=cd?rateCalc(out.cons,g):null;
+  /* پس از تحکیم */
+  out.sp.forEach(function(x,i){
+    var c=out.cons[i];
+    x.Hc=(cd&&c&&isFinite(c.sfin)&&isFinite(x.H0))?x.H0-c.sfin:NaN;
+  });
+  /* پوش گسیختگی */
+  var P=[];
+  out.sp.forEach(function(x){
+    if(!x.fail||!isFinite(x.nm.sigma))return;
+    var sg=S.areaCorr?x.nm.N/x.fail.p.A*1000:x.nm.sigma;
+    x.sig=sg;x.tauf=x.fail.p.tau;
+    if(isFinite(sg)&&isFinite(x.tauf))P.push({x:sg,y:x.tauf});
+  });
+  out.fit=fitLine(P,S.c0);
+  out.fitPts=P;
+  out.checks=checksOf(out);
+  return out;
+}
+
+/* ---------------- ضوابط و هشدارها ---------------- */
+function checksOf(r){
+  var o=[],g=r.g,L=g.L,dmax=num(S.box.dmax),cd=r.cd;
+  function w(t){o.push({l:'w',t:t});}
+  function ok(t){o.push({l:'o',t:t});}
+  function inf(t){o.push({l:'i',t:t});}
+  if(isFinite(L)){
+    if(L<50)w('ابعاد نمونه کمتر از ۵۰ میلی‌متر است (حداقل قطر/عرض طبق ASTM D3080: ۵۰ mm).');
+    else ok('قطر/عرض نمونه ≥ ۵۰ mm ✔');
+  }
+  if(isFinite(dmax)&&isFinite(L)){
+    if(L<10*dmax)w('قطر/عرض نمونه باید حداقل ۱۰ برابر بزرگ‌ترین اندازهٔ دانه باشد (اکنون: '+fmt(L/dmax,1)+' برابر).');
+    else ok('قطر/عرض ≥ ۱۰ برابر دانهٔ بزرگ‌تر ✔');
+  }
+  var Hs=r.sp.map(function(x){return x.H0;}).filter(isFinite);
+  if(Hs.length&&isFinite(L)){
+    var Hm=Math.min.apply(null,Hs);
+    if(Hm<13)w('ضخامت اولیهٔ نمونه کمتر از ۱۳ mm است (حداقل ASTM D3080: ۱۳ mm).');
+    else ok('ضخامت اولیه ≥ ۱۳ mm ✔');
+    if(isFinite(dmax)&&Hm<6*dmax)w('ضخامت نمونه باید حداقل ۶ برابر بزرگ‌ترین دانه باشد.');
+    var Hx=Math.max.apply(null,Hs);
+    if(L/Hx<2)w('نسبت قطر (یا عرض) به ضخامت کمتر از ۲:۱ است.');
+    else ok('نسبت قطر یا عرض به ضخامت ≥ ۲:۱ ✔');
+  }
+  if(num(S.gh)>0.02)inf('خوانایی گیج جابه‌جایی افقی طبق ASTM D3080 باید حداقل ۰٫۰۲ mm باشد؛ گیج انتخابی درشت‌تر است.');
+  if(cd&&num(S.gv)>0.002)inf('خوانایی گیج جابه‌جایی عمودی طبق ASTM D3080 حداقل ۰٫۰۰۲ mm است؛ گیج انتخابی درشت‌تر است.');
+  var top=num(S.box.top),Ns=r.sp.map(function(x){return x.nm.N;}).filter(isFinite);
+  if(isFinite(top)&&Ns.length){
+    var Nm=Math.min.apply(null,Ns);
+    if(top>=0.01*Nm)w('وزن نیمهٔ بالایی جعبه باید کمتر از ۱٪ نیروی قائم باشد (باید با نیروی مقابل تعادل شود).');
+    else ok('وزن نیمهٔ بالایی جعبه < ۱٪ نیروی قائم ✔');
+  }
+  var sg=r.sp.map(function(x){return x.nm.sigma;}).filter(isFinite);
+  if(sg.length===3&&(sg[0]===sg[1]||sg[1]===sg[2]||sg[0]===sg[2]))w('سه تنش قائم باید با هم متفاوت باشند.');
+  /* دقت نیرو */
+  var Fmax=0;r.sp.forEach(function(x){if(x.fail&&x.fail.p.F>Fmax)Fmax=x.fail.p.F;});
+  var acc=S.dev.type==='ring'?r.kf:num(S.dev.acc);
+  if(isFinite(acc)&&Fmax>0){
+    var need=Math.max(2.5,0.01*Fmax);
+    if(acc>need)w('دقت نیروسنج ('+fmt(acc,2)+' N) از حد استاندارد ('+fmt(need,2)+' N یا ۱٪ نیروی گسیختگی، هر کدام بزرگ‌تر) درشت‌تر است.');
+    else ok('دقت نیروسنج مطابق استاندارد ✔');
+  }
+  /* سرعت */
+  var rate=num(S.rate);
+  if(isFinite(rate)){
+    if(rate<0.0025||rate>1.0)inf('گسترهٔ سرعت دستگاه طبق ASTM D3080: ۰٫۰۰۲۵ تا ۱٫۰ mm/min.');
+    if(cd&&r.rate&&isFinite(r.rate.rate)&&rate>r.rate.rate*1.0001)w('سرعت برش واردشده ('+fmt(rate,4)+') از حداکثر سرعت محاسبه‌شده ('+fmt(r.rate.rate,4)+' mm/min) بیشتر است؛ زهکشی کامل تضمین نمی‌شود.');
+    else if(cd&&r.rate&&isFinite(r.rate.rate))ok('سرعت برش ≤ سرعت مجاز محاسبه‌شده ✔');
+  }
+  if(!cd)inf('طبق Note 1 استاندارد ASTM D3080 تجهیزات برش مستقیم برای آزمون زهکش‌نشده مناسب نیست؛ مقادیر c و φ در حالت UU ظاهری بوده و فقط برای مقایسه/برآورد سریع است (مرجع روش سریع: BS 1377-7).');
+  r.sp.forEach(function(x,i){
+    if(x.fail&&x.fail.p.mm<g.L*0.1-0.26&&S.crit==='auto'&&x.fail.type.indexOf('بدون پیک')===0)w('نمونه '+(i+1)+': آزمون تا ۱۰٪ جابه‌جایی ادامه نیافته است.');
+  });
+  return o;
+}
+
+/* ---------------- نمودارها (SVG) ---------------- */
+function niceTicks(min,max,n){
+  n=n||5;
+  if(!(max>min))max=min+1;
+  var span=max-min,s0=span/n,mag=Math.pow(10,Math.floor(Math.log10(s0))),r=s0/mag;
+  var step=(r<1.5?1:r<3?2:r<7?5:10)*mag;
+  var t0=Math.floor(min/step+1e-9)*step,t1=Math.ceil(max/step-1e-9)*step,t=[];
+  for(var v=t0;v<=t1+step*1e-6;v+=step)t.push(+v.toFixed(10));
+  return t;
+}
+function lineChart(o){
+  var W=360,H=250,m={l:46,r:12,t:36,b:44},pw=W-m.l-m.r,ph=H-m.t-m.b;
+  var xs=[],ys=[];
+  o.series.forEach(function(s){s.pts.forEach(function(p){if(isFinite(p[0])&&isFinite(p[1])){xs.push(p[0]);ys.push(p[1]);}});});
+  if(!xs.length)return '<div class="nochart">'+esc(o.title)+' — داده‌ای برای رسم نیست</div>';
+  var xmin=o.xmin!=null?o.xmin:Math.min.apply(null,xs),xmax=o.xmax!=null?o.xmax:Math.max.apply(null,xs);
+  var ymin=o.ymin!=null?o.ymin:Math.min.apply(null,ys),ymax=o.ymax!=null?o.ymax:Math.max.apply(null,ys);
+  var xt=niceTicks(xmin,xmax),yt=niceTicks(ymin,ymax);
+  xmin=xt[0];xmax=xt[xt.length-1];ymin=yt[0];ymax=yt[yt.length-1];
+  function X(v){return m.l+(v-xmin)/(xmax-xmin)*pw;}
+  function Y(v){var f=(v-ymin)/(ymax-ymin);return o.invertY?m.t+f*ph:m.t+ph-f*ph;}
+  function tk(v){return String(+v.toFixed(4));}
+  var s='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" font-family="Tahoma,sans-serif" font-size="10">';
+  s+='<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="#fff"/>';
+  s+='<text x="'+W/2+'" y="14" text-anchor="middle" font-size="12" font-weight="bold" fill="#0b3d6b">'+esc(o.title)+'</text>';
+  xt.forEach(function(v){
+    s+='<line x1="'+X(v)+'" y1="'+m.t+'" x2="'+X(v)+'" y2="'+(m.t+ph)+'" stroke="#e2e8f0"/>';
+    s+='<text x="'+X(v)+'" y="'+(m.t+ph+13)+'" text-anchor="middle" direction="ltr" fill="#334155">'+tk(v)+'</text>';
+  });
+  yt.forEach(function(v){
+    s+='<line x1="'+m.l+'" y1="'+Y(v)+'" x2="'+(m.l+pw)+'" y2="'+Y(v)+'" stroke="#e2e8f0"/>';
+    s+='<text x="'+(m.l-4)+'" y="'+(Y(v)+3)+'" text-anchor="end" direction="ltr" fill="#334155">'+tk(v)+'</text>';
+  });
+  s+='<rect x="'+m.l+'" y="'+m.t+'" width="'+pw+'" height="'+ph+'" fill="none" stroke="#475569"/>';
+  s+='<text x="'+(m.l+pw/2)+'" y="'+(H-6)+'" text-anchor="middle" fill="#0f172a">'+esc(o.xLabel)+'</text>';
+  s+='<text transform="translate(11,'+(m.t+ph/2)+') rotate(-90)" text-anchor="middle" fill="#0f172a">'+esc(o.yLabel)+'</text>';
+  var lx=m.l+4;
+  o.series.forEach(function(se){
+    var P=se.pts.filter(function(p){return isFinite(p[0])&&isFinite(p[1]);});
+    if(se.line!==false&&P.length>1){
+      s+='<polyline fill="none" stroke="'+se.color+'" stroke-width="1.8"'+(se.dash?' stroke-dasharray="'+se.dash+'"':'')+' points="'+P.map(function(p){return X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1);}).join(' ')+'"/>';
+    }
+    if(se.mk||se.line===false){
+      P.forEach(function(p){s+='<circle cx="'+X(p[0]).toFixed(1)+'" cy="'+Y(p[1]).toFixed(1)+'" r="'+(se.r||3.4)+'" fill="'+se.color+'" stroke="#fff" stroke-width="0.8"/>';});
+    }
+    if(se.name&&!se.hide){
+      s+='<line x1="'+lx+'" y1="'+(m.t-8)+'" x2="'+(lx+14)+'" y2="'+(m.t-8)+'" stroke="'+se.color+'" stroke-width="2.4"/>';
+      s+='<text x="'+(lx+17)+'" y="'+(m.t-5)+'" direction="ltr" fill="#0f172a">'+esc(se.name)+'</text>';
+      lx+=17+se.name.length*5.4+10;
+    }
+  });
+  (o.notes||[]).forEach(function(n){
+    s+='<text x="'+(m.l+6)+'" y="'+(m.t+14+n.row*13)+'" fill="'+(n.color||'#0b3d6b')+'" font-weight="bold" direction="ltr">'+esc(n.t)+'</text>';
+  });
+  return s+'</svg>';
+}
+function chartTD(r){
+  var series=[],marks=[];
+  r.sp.forEach(function(x,i){
+    var P=x.pts.filter(function(p){return isFinite(p.tau);}).map(function(p){return [p.mm,p.tau];});
+    series.push({name:'σn='+fmt(x.nm.sigma,0),color:COL[i],pts:P});
+    if(x.fail)marks.push({color:COL[i],pts:[[x.fail.p.mm,x.fail.p.tau]],mk:true,line:false,r:4.6,hide:true});
+  });
+  return lineChart({title:'منحنی تنش برشی – جابه‌جایی افقی',xLabel:'جابه‌جایی افقی δ (mm)',yLabel:'تنش برشی τ (kPa)',series:series.concat(marks),xmin:0,ymin:0});
+}
+function chartDV(r){
+  var series=[];
+  r.sp.forEach(function(x,i){
+    if(!x.vert.length)return;
+    series.push({name:'نمونه '+(i+1),color:COL[i],pts:x.vert.map(function(p){return [p.mm,p.dv];})});
+  });
+  return lineChart({title:'تغییر ارتفاع نمونه – جابه‌جایی افقی',xLabel:'جابه‌جایی افقی δ (mm)',yLabel:'تغییر ارتفاع ΔH (mm)  (+ انبساط)',series:series,xmin:0});
+}
+function chartEnv(r){
+  var series=[{name:'τf',color:'#0b3d6b',pts:r.fitPts.map(function(p){return [p.x,p.y];}),line:false,r:4.6}];
+  var notes=[];
+  if(r.fit){
+    var xs=r.fitPts.map(function(p){return p.x;}),xm=Math.max.apply(null,xs)*1.1;
+    series.push({name:'خط برازش',color:'#dc2626',pts:[[0,r.fit.c],[xm,r.fit.c+xm*r.fit.t]],hide:false});
+    var cn=S.mode==='CD'?'c′':'cu',pn=S.mode==='CD'?'φ′':'φu';
+    notes.push({row:0,t:cn+' = '+fmt(r.fit.c,1)+' kPa'});
+    notes.push({row:1,t:pn+' = '+fmt(r.fit.phi,1)+'°'});
+  }
+  var ymin=r.fit?Math.min(0,r.fit.c):0;
+  return lineChart({title:'پوش گسیختگی موهر–کولمب (τf – σn)',xLabel:'تنش قائم σn (kPa)',yLabel:'تنش برشی τf (kPa)',series:series,xmin:0,ymin:ymin,notes:notes});
+}
+function chartCons(r){
+  var series=[];
+  r.cons.forEach(function(c,i){
+    series.push({name:'نمونه '+(i+1),color:COL[i],pts:c.pts.map(function(p){return [p.x,p.s];})});
+  });
+  return lineChart({title:'تحکیم: نشست – √زمان',xLabel:'√t (min^0.5)',yLabel:'نشست (mm)',series:series,xmin:0,ymin:0,invertY:true});
+}
+
+/* ---------------- ساخت فرم ---------------- */
+function V(p){return esc(getP(p));}
+function I(p,cls,extra){
+  var num_=cls&&cls.indexOf('num')>=0;
+  return '<input class="'+(cls||'')+'" data-p="'+p+'" value="'+V(p)+'"'+(num_?' inputmode="decimal" autocomplete="off"':'')+(extra||'')+'>';
+}
+function SEL(p,opts,struct){
+  var cur=String(getP(p));
+  return '<select data-p="'+p+'"'+(struct?' data-s="1"':'')+'>'+opts.map(function(o){return '<option value="'+o[0]+'"'+(String(o[0])===cur?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select>';
+}
+function F(label,html,cls){return '<label class="f'+(cls?' '+cls:'')+'"><span>'+label+'</span>'+html+'</label>';}
+function CK(p,label,struct){return '<label class="ck"><input type="checkbox" data-p="'+p+'"'+(struct?' data-s="1"':'')+(getP(p)===true?' checked':'')+'><span>'+label+'</span></label>';}
+
+function build(){
+  var cd=S.mode==='CD',ring=S.dev.type==='ring',mass=S.nmode==='mass',sq=S.box.shape==='square';
+  var h='';
+  /* ===== 1) مشخصات عمومی ===== */
+  h+='<section class="card"><h2>۱) مشخصات عمومی</h2>';
+  h+='<div class="seg"><button data-mode="UU" class="'+(!cd?'on':'')+'">UU<br>زهکش‌نشده – تحکیم‌نشده<br>(برش سریع)</button>';
+  h+='<button data-mode="CD" class="'+(cd?'on':'')+'">CD<br>تحکیم‌یافته – زهکش‌شده<br>(برش آهسته)</button></div>';
+  h+='<div class="g" style="margin-top:8px">';
+  h+=F('نام پروژه',I('gen.project',''));
+  h+=F('محل / سایت',I('gen.site',''));
+  h+=F('شمارهٔ گمانه',I('gen.bh',''));
+  h+=F('عمق نمونه (m)',I('gen.depth','num'));
+  h+=F('شمارهٔ نمونه',I('gen.sampleNo',''));
+  h+=F('تاریخ آزمایش',I('gen.date',''));
+  h+=F('آزمایش‌کننده',I('gen.tester',''));
+  h+=F('وضعیت نمونه',SEL('gen.cond',[['intact','دست‌نخورده'],['disturbed','دست‌خورده'],['remolded','بازسازی‌شده'],['compacted','متراکم‌شده']]));
+  h+=F('توصیف / رده‌بندی خاک (USCS)',I('gen.desc',''),'span2');
+  h+=F('شمارهٔ استاندارد ملی ایران (اختیاری، در گزارش چاپ می‌شود)',I('gen.iran',''),'span2');
+  h+=F('ملاحظات',I('gen.notes',''),'span2');
+  h+='</div></section>';
+
+  /* ===== 2) مشخصات فنی ===== */
+  h+='<section class="card"><h2>۲) مشخصات فنی</h2>';
+  h+='<h3>جعبهٔ برش</h3><div class="g">';
+  h+=F('شکل جعبه',SEL('box.shape',[['square','مربعی'],['circle','دایره‌ای']],true));
+  h+=F(sq?'عرض L (mm)':'قطر D (mm)',I('box.size','num',' data-s="t"'));
+  h+=F('بزرگ‌ترین دانه (mm)',I('box.dmax','num'));
+  h+=F('وزن نیمهٔ بالایی جعبه (N)',I('box.top','num'));
+  h+='</div>';
+  h+='<h3>گیج‌های جابه‌جایی</h3><div class="g">';
+  h+=F('دقت گیج افقی (mm)',SEL('gh',[['0.01','0.01'],['0.1','0.1']],true));
+  h+=F('دقت گیج عمودی (mm)',SEL('gv',[['0.001','0.001'],['0.01','0.01'],['0.1','0.1']],true));
+  h+=F('جهت قرائت گیج عمودی',SEL('vdir',[['comp','افزایش قرائت = نشست (فشردگی)'],['dil','افزایش قرائت = انبساط (بالا آمدن)']],true),'span2');
+  h+='</div>';
+  h+='<h3>اندازه‌گیری نیروی برشی</h3><div class="g">';
+  h+=F('نوع نیروسنج',SEL('dev.type',[['ring','رینگ نیروسنج + گیج'],['cell','لودسل دیجیتال']],true));
+  if(ring){
+    h+=F('شمارهٔ رینگ',I('dev.ringNo',''));
+    h+=F('ضریب کالیبراسیون رینگ',I('dev.k','num'));
+    h+=F('واحد ضریب',SEL('dev.kunit',[['N/div','N به ازای هر div'],['kgf/div','kgf به ازای هر div'],['kN/div','kN به ازای هر div'],['N/mm','N به ازای هر mm'],['kgf/mm','kgf به ازای هر mm'],['kN/mm','kN به ازای هر mm']],true));
+    h+=F('دقت گیج رینگ (mm)',SEL('dev.gr',[['0.01','0.01'],['0.1','0.1']],true),'span2');
+  }else{
+    h+=F('واحد قرائت لودسل',SEL('dev.cunit',[['N','N'],['kN','kN'],['kgf','kgf'],['lbf','lbf']],true));
+    h+=F('دقت لودسل (N) – اختیاری',I('dev.acc','num'));
+  }
+  h+='</div>';
+  h+='<h3>بارگذاری قائم و نمونه‌ها</h3><div class="g">';
+  h+=F('روش ورود بار قائم',SEL('nmode',[['stress','تنش قائم (kPa)'],['mass','جرم وزنه (kg) × نسبت اهرم']],true),'span2');
+  if(mass){
+    h+=F('نسبت اهرم',I('lever','num'));
+    h+=F('وزن کلاهک و صفحه (N)',I('cap','num'));
+  }
+  h+=F('چگالی ویژهٔ دانه‌ها Gs (اختیاری)',I('Gs','num'),'span2');
+  h+='</div>';
+  h+='<div class="tw" style="margin-top:8px"><table class="spt"><thead><tr><th></th><th>نمونه ۱</th><th>نمونه ۲</th><th>نمونه ۳</th></tr></thead><tbody>';
+  function spRow(lbl,key,cls){return '<tr><td class="lb">'+lbl+'</td>'+[0,1,2].map(function(s){return '<td>'+I('sp.'+s+'.'+key,'num')+'</td>';}).join('')+'</tr>';}
+  function dvRow(lbl,id){return '<tr><td class="lb">'+lbl+'</td>'+[0,1,2].map(function(s){return '<td class="dv" id="'+id+s+'">—</td>';}).join('')+'</tr>';}
+  h+=mass?spRow('جرم وزنه (kg)','mass'):spRow('تنش قائم σn (kPa)','sigma');
+  h+=spRow('ارتفاع اولیه H₀ (mm)','H');
+  h+=spRow('جرم مرطوب نمونه (g)','m');
+  h+=spRow('رطوبت اولیه w₀ (%)','w0');
+  h+=spRow('رطوبت نهایی w_f (%)','wf');
+  h+=dvRow('نیروی قائم (N)','dN');
+  h+=dvRow('σn (kPa)','dS');
+  h+=dvRow('γ تر (kN/m³)','dG');
+  h+=dvRow('γ خشک (kN/m³)','dGd');
+  h+=dvRow('e₀','dE');
+  h+=dvRow('درجهٔ اشباع (%)','dSr');
+  if(cd)h+=dvRow('H پس از تحکیم (mm)','dHc');
+  h+='</tbody></table></div>';
+  h+='<div class="g" style="margin-top:10px">';
+  h+=F('معیار گسیختگی',SEL('crit',[['auto','پیک؛ در نبود پیک ۱۰٪ (ASTM D3080-11 به بعد)'],['max','حداکثر تنش برشی'],['10','تنش در ۱۰٪ جابه‌جایی'],['15','تنش در ۱۵٪ جابه‌جایی (ویرایش‌های قدیمی)']],true),'span2');
+  h+=F('حد انتهای جدول (درصد ابعاد جعبه)',SEL('limitPct',[['10','۱۰٪'],['15','۱۵٪'],['20','۲۰٪']],true),'span2');
+  h+='<div class="span2">'+CK('areaCorr','اصلاح سطح تماس برای جابه‌جایی افقی (پیش‌فرض ASTM: تنش اسمی با کل سطح جعبه)',false)+'</div>';
+  h+='<div class="span2">'+CK('c0','خاک دانه‌ای: پوش از مبدأ بگذرد (c = 0)',false)+'</div>';
+  h+='</div><div id="checks"></div></section>';
+
+  /* ===== 3) تحکیم و سرعت ===== */
+  h+='<section class="card"><h2>۳) '+(cd?'تحکیم و سرعت برش':'سرعت برش')+'</h2>';
+  if(cd){
+    h+='<div class="note">پس از اعمال بار قائم و اشباع، تغییر ارتفاع نمونه را در زمان‌های زیر بخوانید (گیج عمودی). تا پایان تحکیم اولیه ادامه دهید.</div>';
+    h+='<div class="tw" style="margin-top:8px"><table class="spt"><thead><tr><th>زمان (min)</th><th>نمونه ۱</th><th>نمونه ۲</th><th>نمونه ۳</th></tr></thead><tbody>';
+    CT.forEach(function(t,i){
+      h+='<tr><td class="lb">'+(i===0?'0 (شروع)':t)+'</td>'+[0,1,2].map(function(s){return '<td>'+I('C.'+s+'.'+i,'num')+'</td>';}).join('')+'</tr>';
+    });
+    h+='</tbody></table></div><div id="consOut"></div><div class="chart" id="consChart"></div>';
+    h+='<h3>زمان‌ها برای تعیین سرعت</h3>';
+    h+='<div class="tw"><table class="spt"><thead><tr><th></th><th>نمونه ۱</th><th>نمونه ۲</th><th>نمونه ۳</th></tr></thead><tbody>';
+    h+='<tr><td class="lb">t₉₀ محاسبه‌شده (min)</td>'+[0,1,2].map(function(s){return '<td class="dv" id="ct90_'+s+'">—</td>';}).join('')+'</tr>';
+    h+='<tr><td class="lb">t₉₀ دستی (اختیاری)</td>'+[0,1,2].map(function(s){return '<td>'+I('T90.'+s,'num')+'</td>';}).join('')+'</tr>';
+    h+='<tr><td class="lb">t₅₀ دستی (اختیاری)</td>'+[0,1,2].map(function(s){return '<td>'+I('T50.'+s,'num')+'</td>';}).join('')+'</tr>';
+    h+='</tbody></table></div>';
+    h+='<div class="g" style="margin-top:8px">';
+    h+=F('روش محاسبهٔ زمان گسیختگی',SEL('tmethod',[['taylor','t_f = 11.6·t₉₀ (تیلور)'],['casagrande','t_f = 50·t₅₀ (کازاگرانده)']],true),'span2');
+    h+=F('جابه‌جایی تخمینی در گسیختگی d_f (mm)',I('df','num'),'span2');
+    h+='</div><div id="rateOut" class="rb"></div>';
+    h+='<div class="g" style="margin-top:8px">'+F('سرعت برش اعمال‌شده (mm/min)',I('rate','num'),'span2')+'</div>';
+  }else{
+    h+='<div class="note">در حالت UU پس از اعمال بار قائم بلافاصله برش داده می‌شود (بدون تحکیم). سرعت برش را ثبت کنید.</div>';
+    h+='<div class="g" style="margin-top:8px">'+F('سرعت برش اعمال‌شده (mm/min)',I('rate','num'),'span2')+'</div>';
+  }
+  h+='</section>';
+
+  /* ===== 4) جدول قرائت‌ها ===== */
+  h+='<section class="card"><h2>۴) جدول قرائت‌ها</h2>';
+  if(cd){
+    h+='<div class="g">'+F('ستون تغییر ارتفاع مربوط به نمونهٔ',SEL('vspec',[['0','نمونه ۱'],['1','نمونه ۲'],['2','نمونه ۳']],true));
+    h+='<div style="align-self:end">'+CK('vthree','ثبت تغییر ارتفاع هر سه نمونه',true)+'</div></div>';
+  }
+  h+='<div class="note" style="margin:6px 0">قرائت ردیف صفر مبنای صفر نیرو و تغییر ارتفاع است. قرائت نیرو را '+(ring?'بر حسب div گیج رینگ':'بر حسب '+S.dev.cunit)+' وارد کنید.</div>';
+  h+='<div id="dtable"></div></section>';
+
+  /* ===== 5/6 منحنی‌ها و نتایج ===== */
+  h+='<section class="card"><h2>۵) منحنی‌ها</h2>';
+  h+='<div class="chart" id="chTD"></div>';
+  if(cd)h+='<div class="chart" id="chDV"></div>';
+  h+='<div class="chart" id="chEnv"></div></section>';
+  h+='<section class="card"><h2>۶) نتایج نهایی</h2><div id="results"></div>';
+  h+='<details><summary>جدول تنش‌های برشی محاسبه‌شده</summary><div id="shearTbl"></div></details>';
+  h+='<details><summary>نکات استاندارد (ASTM D3080 / AASHTO T 236 / BS 1377-7)</summary><ul>'+
+   '<li>حداقل قطر یا عرض نمونه ۵۰ mm و نه کمتر از ۱۰ برابر بزرگ‌ترین دانه؛ حداقل ضخامت ۱۳ mm و نه کمتر از ۶ برابر بزرگ‌ترین دانه؛ نسبت قطر یا عرض به ضخامت حداقل ۲:۱.</li>'+
+   '<li>حداقل سه نمونهٔ مشابه، هرکدام با تنش قائم متفاوت.</li>'+
+   '<li>گسیختگی: حداکثر تنش برشی؛ در نبود پیک، تنش در ۱۰٪ جابه‌جایی نسبی (ویرایش‌های قدیمی‌تر: ۱۵ تا ۲۰٪).</li>'+
+   '<li>دستگاه برش باید سرعت را از ۰٫۰۰۲۵ تا ۱٫۰ mm/min قابل تنظیم کند؛ در CD سرعت از زمان تحکیم (t₅₀ یا t₉₀) تعیین می‌شود.</li>'+
+   '<li>خوانایی گیج افقی حداقل ۰٫۰۲ mm و گیج عمودی حداقل ۰٫۰۰۲ mm؛ دقت نیروسنج ۲٫۵ N یا ۱٪ نیروی گسیختگی (هرکدام بزرگ‌تر).</li>'+
+   '<li>وزن نیمهٔ بالایی جعبه کمتر از ۱٪ نیروی قائم؛ رطوبت و وزن واحد حجم اولیه و رطوبت نهایی ثبت شود.</li>'+
+   '<li>سطح تماس حین برش کاهش می‌یابد؛ این موضوع نسبت تنش‌ها را عوض نمی‌کند ولی مقدار مطلق را نامعین می‌کند.</li>'+
+   '<li>تجهیزات برش مستقیم برای آزمون زهکش‌نشده مناسب نیست؛ UU فقط روش سریع و تقریبی است.</li>'+
+   '</ul></details>';
+  h+='<button class="act" id="resetBtn">پاک کردن همهٔ داده‌ها</button></section>';
+  byId('app').innerHTML=h;
+  byId('dtable').innerHTML=dataTable();
+  var rb=byId('resetBtn');
+  if(rb)rb.onclick=function(){if(confirm('همهٔ داده‌های واردشده پاک شود؟')){S=clone(DEF);save();build();update();}};
+  var segs=document.querySelectorAll('[data-mode]');
+  for(var i=0;i<segs.length;i++)segs[i].onclick=function(){S.mode=this.getAttribute('data-mode');save();build();update();};
+}
+
+function dataTable(){
+  var rows=getRows(),cd=S.mode==='CD',ring=S.dev.type==='ring';
+  var uF=ring?'قرائت رینگ (div)':'نیرو ('+S.dev.cunit+')';
+  var vs=+S.vspec;
+  var h='<div class="tw"><table class="dt"><thead><tr><th class="c1">تغییرمکان افقی<small>قرائت گیج (div)</small><small>گیج '+S.gh+' mm</small></th>';
+  [0,1,2].forEach(function(s){h+='<th>'+uF+'<small>نمونه '+(s+1)+' &nbsp; σn = <span id="hs'+s+'">—</span></small></th>';});
+  if(cd){
+    if(S.vthree)[0,1,2].forEach(function(s){h+='<th>تغییر ارتفاع<small>نمونه '+(s+1)+' (div '+S.gv+')</small></th>';});
+    else h+='<th>تغییر ارتفاع نمونه<small>نمونه '+(vs+1)+' (div '+S.gv+')</small></th>';
+  }
+  h+='</tr></thead><tbody>';
+  rows.forEach(function(mm){
+    var k=rk(mm);
+    h+='<tr><td class="c1"><b>'+divOf(mm)+'</b><small>'+mm.toFixed(2)+' mm</small></td>';
+    [0,1,2].forEach(function(s){h+='<td>'+I('F.'+s+'.'+k,'num')+'</td>';});
+    if(cd){
+      if(S.vthree)[0,1,2].forEach(function(s){h+='<td>'+I('V.'+s+'.'+k,'num')+'</td>';});
+      else h+='<td>'+I('V.'+vs+'.'+k,'num')+'</td>';
+    }
+    h+='</tr>';
+  });
+  return h+'</tbody></table></div>';
+}
+
+/* ---------------- نتایج ---------------- */
+function critNames(){return S.mode==='CD'?{c:'c′',p:'φ′',t:'تنش مؤثر زهکش‌شده (CD)'}:{c:'c<sub>u</sub>',p:'φ<sub>u</sub>',t:'ظاهری (UU)'};}
+function resultsHTML(r){
+  var n=critNames(),h='';
+  if(r.fit){
+    h+='<div class="big">'+n.c+' = <b>'+fmt(r.fit.c,1)+'</b> kPa<br>'+n.p+' = <b>'+fmt(r.fit.phi,1)+'</b>°';
+    h+='<div class="note">tan φ = '+fmt(r.fit.t,4)+' &nbsp;|&nbsp; R² = '+fmt(r.fit.r2,4)+' &nbsp;|&nbsp; تعداد نقاط: '+r.fit.n+(r.fit.c0?' &nbsp;|&nbsp; برازش از مبدأ':'')+'</div></div>';
+  }else h+='<div class="nochart">برای تعیین c و φ حداقل دو نمونه با تنش قائم متفاوت و قرائت نیرو لازم است.</div>';
+  h+='<div class="tw"><table class="rt"><thead><tr><th>نمونه</th><th>σn (kPa)</th><th>τf (kPa)</th><th>δf (mm)</th><th>δf/'+(r.g.sq?'L':'D')+' (%)</th></tr></thead><tbody>';
+  r.sp.forEach(function(x,i){
+    h+='<tr><td>'+(i+1)+'</td><td>'+fmt(x.sig!=null?x.sig:x.nm.sigma,1)+'</td><td>'+(x.fail?fmt(x.fail.p.tau,1):'—')+'</td><td>'+(x.fail?fmt(x.fail.p.mm,2):'—')+'</td><td>'+(x.fail?fmt(x.fail.p.mm/r.g.L*100,1):'—')+'</td></tr>';
+    if(x.fail)h+='<tr><td colspan="5" class="lb">'+esc(x.fail.type)+'</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  var rate=num(S.rate);
+  if(isFinite(rate)){
+    var d=r.sp.map(function(x){return x.fail?x.fail.p.mm/rate:NaN;});
+    h+='<div class="rb">سرعت برش: <b>'+fmt(rate,4)+'</b> mm/min'+(isFinite(d[0])||isFinite(d[1])||isFinite(d[2])?' — زمان تا گسیختگی: '+d.map(function(t){return fmt(t,0);}).join(' / ')+' min':'')+'</div>';
+  }
+  return h;
+}
+function shearTableHTML(r){
+  var cd=r.cd;
+  var h='<div class="tw"><table class="rt"><thead><tr><th>δ (mm)</th><th>τ₁ (kPa)</th><th>τ₂ (kPa)</th><th>τ₃ (kPa)</th>'+(cd?'<th>ΔH₁</th><th>ΔH₂</th><th>ΔH₃</th>':'')+'</tr></thead><tbody>';
+  r.rows.forEach(function(mm){
+    var any=false,c='';
+    r.sp.forEach(function(x){
+      var p=x.pts.filter(function(q){return q.mm===mm;})[0];
+      if(p&&isFinite(p.tau))any=true;
+      c+='<td>'+(p&&isFinite(p.tau)?fmt(p.tau,1):'')+'</td>';
+    });
+    if(cd)r.sp.forEach(function(x){var v=x.vert.filter(function(q){return q.mm===mm;})[0];if(v)any=true;c+='<td>'+(v?fmt(v.dv,3):'')+'</td>';});
+    if(any)h+='<tr><td>'+mm.toFixed(2)+'</td>'+c+'</tr>';
+  });
+  return h+'</tbody></table></div>';
+}
+
+/* ---------------- به‌روزرسانی صفحه ---------------- */
+function update(){
+  var r=calc();window._r=r;
+  [0,1,2].forEach(function(s){
+    var x=r.sp[s];
+    setT('hs'+s,fmt(x.nm.sigma,1)+' kPa');
+    setT('dN'+s,fmt(x.nm.N,1));
+    setT('dS'+s,fmt(x.nm.sigma,1));
+    setT('dG'+s,fmt(x.gam,2));
+    setT('dGd'+s,fmt(x.gd,2));
+    setT('dE'+s,fmt(x.e0,3));
+    setT('dSr'+s,fmt(x.Sr,1));
+    setT('dHc'+s,fmt(x.Hc,2));
+  });
+  var ck=r.checks.map(function(c){return '<div class="chk '+c.l+'">'+esc(c.t)+'</div>';}).join('');
+  setH('checks',ck);
+  if(r.cd){
+    setH('consChart',chartCons(r));
+    var co='';
+    r.cons.forEach(function(c,i){
+      setT('ct90_'+i,fmt(c.t90,2));
+      co+='<div class="note">نمونه '+(i+1)+': t₉₀ = '+fmt(c.t90,2)+' min ، t₅₀ ≈ '+fmt(c.t50,2)+' min ، نشست تحکیمی = '+fmt(c.sfin,3)+' mm</div>';
+    });
+    setH('consOut',co);
+    var ra=r.rate;
+    setH('rateOut','t<sub>f</sub> = <b>'+fmt(ra.tf,1)+'</b> min ('+(S.tmethod==='taylor'?'۱۱٫۶ × t₉₀ = ۱۱٫۶ × '+fmt(ra.t90,2):'۵۰ × t₅₀ = ۵۰ × '+fmt(ra.t50,2))+')<br>'+
+      'حداکثر سرعت برش = d<sub>f</sub> / t<sub>f</sub> = '+fmt(ra.df,2)+' / '+fmt(ra.tf,1)+' = <b>'+fmt(ra.rate,4)+'</b> mm/min<br><span class="note">بزرگ‌ترین t از بین سه نمونه (کندترین تحکیم) ملاک است. d_f و روابط را با بند ۹٫۱۰ نسخهٔ رسمی استاندارد خود تطبیق دهید.</span>');
+  }
+  setH('chTD',chartTD(r));
+  setH('chDV',chartDV(r));
+  setH('chEnv',chartEnv(r));
+  setH('results',resultsHTML(r));
+  setH('shearTbl',shearTableHTML(r));
+}
+
+/* ---------------- گزارش (چاپ / اشتراک) ---------------- */
+var REP_CSS='.rep{direction:rtl;font-family:Tahoma,"Noto Naskh Arabic","Noto Sans Arabic",sans-serif;color:#000;font-size:11px;line-height:1.6;background:#fff}'+
+'.rep h1{font-size:16px;text-align:center;margin:0 0 2px}.rep .sub{text-align:center;font-size:10px;color:#333;margin-bottom:6px}'+
+'.rep h3{font-size:12px;background:#e5e7eb;padding:3px 6px;margin:10px 0 4px;border-right:4px solid #0b3d6b}'+
+'.rep table{width:100%;border-collapse:collapse;margin-bottom:6px}'+
+'.rep th,.rep td{border:1px solid #444;padding:2px 4px;text-align:center;font-size:10px}'+
+'.rep th{background:#e5e7eb}.rep td.l{text-align:right}'+
+'.rep .kv td:nth-child(odd){background:#f3f4f6;text-align:right;width:17%}'+
+'.rep .charts{display:flex;flex-wrap:wrap;gap:6px}.rep .charts>div{width:49%;page-break-inside:avoid;border:1px solid #bbb}'+
+'.rep svg{width:100%;height:auto;display:block}'+
+'.rep .big{border:2px solid #0b3d6b;padding:6px;text-align:center;font-size:14px;margin:6px 0}'+
+'.rep .warn{color:#92400e;font-size:10px}.rep tr{page-break-inside:avoid}'+
+'.rep .sig{display:flex;justify-content:space-between;margin-top:26px;font-size:11px}'+
+'@media screen and (max-width:600px){.rep .charts>div{width:100%}}';
+var COND={intact:'دست‌نخورده',disturbed:'دست‌خورده',remolded:'بازسازی‌شده',compacted:'متراکم‌شده'};
+function kv(pairs){
+  var h='<table class="kv">';
+  for(var i=0;i<pairs.length;i+=2){
+    h+='<tr><td>'+pairs[i][0]+'</td><td>'+esc(pairs[i][1])+'</td>'+(pairs[i+1]?'<td>'+pairs[i+1][0]+'</td><td>'+esc(pairs[i+1][1])+'</td>':'<td></td><td></td>')+'</tr>';
+  }
+  return h+'</table>';
+}
+function reportBody(){
+  var r=calc(),cd=r.cd,g=S.gen,n=critNames(),ring=S.dev.type==='ring';
+  var h='<div class="rep"><h1>آزمایش برش مستقیم خاک — '+(cd?'تحکیم‌یافته زهکش‌شده (CD)':'زهکش‌نشده تحکیم‌نشده (UU، سریع)')+'</h1>';
+  h+='<div class="sub">ASTM D3080/D3080M (معادل AASHTO T 236)'+(cd?'':' — BS 1377-7 (روش سریع)')+(g.iran?' — استاندارد ملی ایران: '+esc(g.iran):'')+'</div>';
+  h+='<h3>مشخصات عمومی</h3>'+kv([['پروژه',g.project],['محل',g.site],['گمانه',g.bh],['عمق (m)',g.depth],['شمارهٔ نمونه',g.sampleNo],['تاریخ',g.date],['آزمایش‌کننده',g.tester],['وضعیت نمونه',COND[g.cond]||''],['توصیف خاک',g.desc],['ملاحظات',g.notes]]);
+  h+='<h3>مشخصات فنی</h3>';
+  h+=kv([
+    ['شکل جعبه',r.g.sq?'مربعی':'دایره‌ای'],[r.g.sq?'عرض L (mm)':'قطر D (mm)',S.box.size],
+    ['سطح جعبه (mm²)',fmt(r.g.A,1)],['بزرگ‌ترین دانه (mm)',S.box.dmax],
+    ['گیج افقی (mm)',S.gh],['گیج عمودی (mm)',S.gv],
+    ['نیروسنج',ring?'رینگ'+(S.dev.ringNo?' شمارهٔ '+S.dev.ringNo:'')+' — ضریب '+S.dev.k+' '+S.dev.kunit:'لودسل ('+S.dev.cunit+')'],
+    ['سرعت برش (mm/min)',S.rate],
+    ['معیار گسیختگی',({auto:'پیک / ۱۰٪',max:'حداکثر',10:'۱۰٪',15:'۱۵٪'})[S.crit]],
+    ['سطح در محاسبه',S.areaCorr?'اصلاح‌شده':'اسمی (کل سطح جعبه)']
+  ]);
+  h+='<table><thead><tr><th>مشخصه</th><th>نمونه ۱</th><th>نمونه ۲</th><th>نمونه ۳</th></tr></thead><tbody>';
+  function row(l,f){h+='<tr><td class="l">'+l+'</td>'+[0,1,2].map(function(s){return '<td>'+f(r.sp[s],s)+'</td>';}).join('')+'</tr>';}
+  row('σn (kPa)',function(x){return fmt(x.nm.sigma,1);});
+  row('نیروی قائم (N)',function(x){return fmt(x.nm.N,1);});
+  row('H₀ (mm)',function(x,s){return esc(S.sp[s].H);});
+  row('w₀ (%)',function(x){return fmt(x.w0,1);});
+  row('w_f (%)',function(x){return fmt(x.wf,1);});
+  row('γ تر (kN/m³)',function(x){return fmt(x.gam,2);});
+  row('γ خشک (kN/m³)',function(x){return fmt(x.gd,2);});
+  row('e₀',function(x){return fmt(x.e0,3);});
+  if(cd)row('H پس از تحکیم (mm)',function(x){return fmt(x.Hc,2);});
+  h+='</tbody></table>';
+  if(cd){
+    h+='<h3>تحکیم و تعیین سرعت</h3><table><thead><tr><th>مشخصه</th><th>نمونه ۱</th><th>نمونه ۲</th><th>نمونه ۳</th></tr></thead><tbody>';
+    h+='<tr><td class="l">t₉₀ (min)</td>'+r.rate.t90s.map(function(v){return '<td>'+fmt(v,2)+'</td>';}).join('')+'</tr>';
+    h+='<tr><td class="l">t₅₀ (min)</td>'+r.rate.t50s.map(function(v){return '<td>'+fmt(v,2)+'</td>';}).join('')+'</tr></tbody></table>';
+    h+='<div>t<sub>f</sub> = '+fmt(r.rate.tf,1)+' min ، d<sub>f</sub> = '+fmt(r.rate.df,2)+' mm ، حداکثر سرعت مجاز = '+fmt(r.rate.rate,4)+' mm/min ، سرعت اعمال‌شده = '+esc(S.rate)+' mm/min</div>';
+  }
+  h+='<h3>قرائت‌ها</h3><table><thead><tr><th>δ (div)</th><th>δ (mm)</th>'+[0,1,2].map(function(s){return '<th>'+(ring?'قرائت رینگ':'نیرو ('+S.dev.cunit+')')+' '+(s+1)+'</th>';}).join('');
+  var vcols=[];
+  if(cd){[0,1,2].forEach(function(s){if(S.vthree||String(s)===String(S.vspec))vcols.push(s);});vcols.forEach(function(s){h+='<th>گیج عمودی '+(s+1)+'</th>';});}
+  h+='</tr></thead><tbody>';
+  r.rows.forEach(function(mm){
+    var k=rk(mm),any=false,c='';
+    [0,1,2].forEach(function(s){var v=(S.F[s]||{})[k];if(String(v||'')!=='')any=true;c+='<td>'+esc(v||'')+'</td>';});
+    vcols.forEach(function(s){var v=(S.V[s]||{})[k];if(String(v||'')!=='')any=true;c+='<td>'+esc(v||'')+'</td>';});
+    if(any)h+='<tr><td>'+divOf(mm)+'</td><td>'+mm.toFixed(2)+'</td>'+c+'</tr>';
+  });
+  h+='</tbody></table>';
+  h+='<h3>تنش برشی محاسبه‌شده</h3>'+shearTableHTML(r);
+  h+='<h3>منحنی‌ها</h3><div class="charts"><div>'+chartTD(r)+'</div>'+(cd?'<div>'+chartDV(r)+'</div>':'')+'<div>'+chartEnv(r)+'</div>'+(cd?'<div>'+chartCons(r)+'</div>':'')+'</div>';
+  h+='<h3>نتایج نهایی</h3>';
+  if(r.fit)h+='<div class="big">'+n.c+' = <b>'+fmt(r.fit.c,1)+'</b> kPa &nbsp;&nbsp;|&nbsp;&nbsp; '+n.p+' = <b>'+fmt(r.fit.phi,1)+'</b>° &nbsp;&nbsp;<span style="font-size:10px">(R² = '+fmt(r.fit.r2,4)+(r.fit.c0?'، برازش از مبدأ':'')+')</span></div>';
+  h+='<table><thead><tr><th>نمونه</th><th>σn (kPa)</th><th>τf (kPa)</th><th>δf (mm)</th><th>δf/'+(r.g.sq?'L':'D')+' (%)</th><th>معیار</th></tr></thead><tbody>';
+  r.sp.forEach(function(x,i){
+    h+='<tr><td>'+(i+1)+'</td><td>'+fmt(x.sig!=null?x.sig:x.nm.sigma,1)+'</td><td>'+(x.fail?fmt(x.fail.p.tau,1):'—')+'</td><td>'+(x.fail?fmt(x.fail.p.mm,2):'—')+'</td><td>'+(x.fail?fmt(x.fail.p.mm/r.g.L*100,1):'—')+'</td><td class="l">'+(x.fail?esc(x.fail.type):'')+'</td></tr>';
+  });
+  h+='</tbody></table>';
+  r.checks.forEach(function(c){if(c.l!=='o')h+='<div class="warn">• '+esc(c.t)+'</div>';});
+  h+='<div class="sig"><div>آزمایش‌کننده: ........................</div><div>کنترل: ........................</div><div>تأییدکننده: ........................</div></div></div>';
+  return h;
+}
+function reportFull(){
+  return '<!DOCTYPE html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>گزارش آزمایش برش مستقیم</title><style>body{margin:8px;background:#fff}'+REP_CSS+'</style></head><body>'+reportBody()+'</body></html>';
+}
+function fileBase(){
+  var d=new Date(),p=function(x){return (x<10?'0':'')+x;};
+  return 'DirectShear_'+S.mode+'_'+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'_'+p(d.getHours())+p(d.getMinutes());
+}
+function summaryText(){
+  var r=window._r||calc(),n=S.mode==='CD'?['c′','φ′']:['cu','φu'];
+  var t='آزمایش برش مستقیم ('+S.mode+')';
+  if(S.gen.project)t+=' — '+S.gen.project;
+  if(r.fit)t+='\n'+n[0]+' = '+fmt(r.fit.c,1)+' kPa\n'+n[1]+' = '+fmt(r.fit.phi,1)+'°';
+  return t;
+}
+function nextFrame(){return new Promise(function(res){requestAnimationFrame(function(){setTimeout(res,60);});});}
+function plug(name){var C=window.Capacitor;return (C&&C.Plugins&&C.Plugins[name])||null;}
+function isNative(){var C=window.Capacitor;return !!(C&&C.isNativePlatform&&C.isNativePlatform());}
+
+async function doPrint(){
+  try{
+    byId('printRoot').innerHTML=reportBody();
+    await nextFrame();
+    var P=plug('PrintPlugin');
+    if(P&&isNative())await P.print({name:fileBase()});
+    else window.print();
+  }catch(e){alert('خطا در چاپ: '+(e&&e.message?e.message:e));}
+}
+async function doShare(){
+  var html=reportFull(),name=fileBase()+'.html',title='گزارش آزمایش برش مستقیم';
+  try{
+    var FS=plug('Filesystem'),SH=plug('Share');
+    if(FS&&SH&&isNative()){
+      var w=await FS.writeFile({path:name,data:html,directory:'CACHE',encoding:'utf8'});
+      await SH.share({title:title,text:summaryText(),url:w.uri,dialogTitle:'اشتراک‌گذاری گزارش'});
+    }else if(navigator.share){
+      var f=new File([html],name,{type:'text/html'});
+      if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({files:[f],title:title});
+      else await navigator.share({title:title,text:summaryText()});
+    }else{
+      var a=document.createElement('a');
+      a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));
+      a.download=name;document.body.appendChild(a);a.click();a.remove();
+    }
+  }catch(e){
+    var m=String(e&&e.message?e.message:e).toLowerCase();
+    if(m.indexOf('cancel')>=0||m.indexOf('abort')>=0)return;
+    alert('خطا در اشتراک‌گذاری: '+(e&&e.message?e.message:e));
+  }
+}
+
+/* ---------------- رویدادها ---------------- */
+function onIn(e){
+  var el=e.target;
+  if(!el||!el.getAttribute)return;
+  var p=el.getAttribute('data-p');
+  if(!p)return;
+  if(el.tagName==='SELECT'&&e.type==='input')return;
+  var v;
+  if(el.type==='checkbox')v=el.checked;
+  else{
+    v=el.value;
+    if(el.classList.contains('num')){
+      var nv=normalizeNum(v);
+      if(nv!==v){el.value=nv;}
+      v=nv;
+    }
+  }
+  setP(p,v);
+  save();
+  var ds=el.getAttribute('data-s');
+  if(ds==='1'&&e.type==='change')build();
+  else if(ds==='t'&&e.type==='change'){var dt=byId('dtable');if(dt)dt.innerHTML=dataTable();}
+  update();
+}
+function init(){
+  var st=byId('repcss');
+  if(st)st.textContent=REP_CSS;
+  build();update();
+  document.addEventListener('input',onIn);
+  document.addEventListener('change',onIn);
+  var mb=byId('menuBtn'),mn=byId('menu');
+  mb.onclick=function(ev){ev.stopPropagation();mn.hidden=!mn.hidden;};
+  document.addEventListener('click',function(ev){if(!mn.hidden&&!mn.contains(ev.target))mn.hidden=true;});
+  mn.onclick=function(ev){
+    var b=ev.target.closest?ev.target.closest('button'):null;if(!b)return;
+    mn.hidden=true;
+    var a=b.getAttribute('data-act');
+    if(a==='print')doPrint();else if(a==='share')doShare();
+  };
+}
+if(typeof document!=='undefined'&&byId('app'))init();
+</script>
+</body>
+</html>

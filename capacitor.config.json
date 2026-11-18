@@ -1,0 +1,8 @@
+{
+  "appId": "ir.soillab.directshear",
+  "appName": "برش مستقیم",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  }
+}
