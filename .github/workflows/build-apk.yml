@@ -1,1 +1,115 @@
+name: Build APK
 
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Prepare web folder
+        run: |
+          mkdir -p www
+          cp index.html www/index.html
+
+      - name: Add Android platform
+        run: npx cap add android
+
+      - name: Add native print plugin
+        run: |
+          set -e
+          APPID=$(node -p "require('./capacitor.config.json').appId")
+          PKGDIR="android/app/src/main/java/$(echo "$APPID" | tr . /)"
+          mkdir -p "$PKGDIR"
+          cat > "$PKGDIR/PrintPlugin.java" <<JAVA
+          package $APPID;
+
+          import android.content.Context;
+          import android.print.PrintAttributes;
+          import android.print.PrintDocumentAdapter;
+          import android.print.PrintManager;
+          import android.webkit.WebView;
+          import com.getcapacitor.Plugin;
+          import com.getcapacitor.PluginCall;
+          import com.getcapacitor.PluginMethod;
+          import com.getcapacitor.annotation.CapacitorPlugin;
+
+          @CapacitorPlugin(name = "PrintPlugin")
+          public class PrintPlugin extends Plugin {
+              @PluginMethod
+              public void print(final PluginCall call) {
+                  final String name = call.getString("name", "direct-shear");
+                  getActivity().runOnUiThread(new Runnable() {
+                      @Override
+                      public void run() {
+                          try {
+                              WebView webView = getBridge().getWebView();
+                              PrintManager pm = (PrintManager) getActivity().getSystemService(Context.PRINT_SERVICE);
+                              PrintDocumentAdapter adapter = webView.createPrintDocumentAdapter(name);
+                              PrintAttributes attrs = new PrintAttributes.Builder()
+                                  .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
+                                  .build();
+                              pm.print(name, adapter, attrs);
+                              call.resolve();
+                          } catch (Exception e) {
+                              call.reject(String.valueOf(e.getMessage()));
+                          }
+                      }
+                  });
+              }
+          }
+          JAVA
+          cat > "$PKGDIR/MainActivity.java" <<JAVA
+          package $APPID;
+
+          import android.os.Bundle;
+          import com.getcapacitor.BridgeActivity;
+
+          public class MainActivity extends BridgeActivity {
+              @Override
+              public void onCreate(Bundle savedInstanceState) {
+                  registerPlugin(PrintPlugin.class);
+                  super.onCreate(savedInstanceState);
+              }
+          }
+          JAVA
+
+      - name: Generate icons (only if assets folder exists)
+        run: |
+          if [ -d assets ]; then
+            npx @capacitor/assets generate --android
+          fi
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      - name: Build debug APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: direct-shear-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
